@@ -21,7 +21,7 @@ int cmp(char c){
         default:return -1;
     }
 }
-void ElemStat() {
+void ElemStat() {//对输入字符串中的变元进行统计与整理
     int slen=strlen(input);
     elemNum=0;
     for(int i=0;i<slen;i++)if(input[i]>='a'&&input[i]<='z'){
@@ -36,18 +36,18 @@ void ElemStat() {
             }
         }
 }
-void changeTrueTable(int x){
+void changeTrueTable(int x){//改变真值表的值
     for(int i=0;i<elemNum;i++){
         trueTable[i]=x%2;
         x/=2;
     }
 }
-int pow2(int num) {
+int pow2(int num) {//计算2幂次
     int result=1;
     for(int i=1;i<=num;i++)result*=2;
     return result;
 }
-int getOrder() {
+int getOrder() {//由二进值数还原十进制编号
     int result=0;
     for(int i=0;i<elemNum;i++){
         result+=pow2(elemNum-i-1)*trueTable[i];
@@ -88,7 +88,7 @@ int judge() {//返回0表示这组赋值使得原命题为假，返回1表示这
     }//预处理整个串,替换变元到具体的赋值
     while(!OP.empty())OP.pop();//置空初始化
     while(!VALUE.empty())VALUE.pop();//置空初始化
-    VALUE.push('#');
+    VALUE.push('#');//预先填入一个字符以处理首位!的情况，使得每次均能够取出两个VALUE，无论是一元还是二元运算都可以
 
     for(int i=0;i<slen;i++){
         if(s[i]=='T'||s[i]=='F'){
