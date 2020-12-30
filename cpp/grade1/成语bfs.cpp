@@ -49,8 +49,7 @@ int main()
     {  
         long a,b,c,d;  
         scanf("%ld %ld %ld %ld",&a,&b,&c,&d);  
-        G[a].push_back(d);  
-    }  
+        G[a].push_back(d);
     long start,end,t1,t2,t3,t4,t5,t6;  
     scanf("%ld %ld %ld %ld",&t1,&t2,&t3,&start);  
     scanf("%ld %ld %ld %ld",&end,&t4,&t5,&t6);  
