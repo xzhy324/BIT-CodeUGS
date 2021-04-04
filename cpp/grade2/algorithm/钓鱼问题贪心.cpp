@@ -1,17 +1,16 @@
-#include "iostream"
-#include "queue"
-#include "vector"
+#include <iostream>
+#include <queue>
+#include <vector>
 const int N=30;
 using namespace std;
 struct Pool{
     int fi,di;
     int id;
-}pool[N];
-struct cmp{//对结构体定义大根堆的比较规则
-    bool operator() (const Pool &a,const Pool &b){
-        return a.fi<=b.fi;
+    bool friend operator< (Pool a,Pool b){
+        if(a.fi==b.fi)return a.id>b.id;
+        return a.fi<b.fi;
     }
-};
+}pool[N];
 int main(){
     int n,total_time;
     bool format_flag=false;
@@ -35,29 +34,23 @@ int main(){
             for(int i=0;i<N;i++)time_spent[i]=0;
             int fish_caught=0;
 
-            priority_queue <Pool,vector<Pool>,cmp> heap_max;
+            priority_queue <Pool> heap_max;
             for(int i=1;i<=end;i++){
-                if(pool[i].fi>=0)heap_max.push(pool[i]);
+                if(pool[i].fi>0)heap_max.push(pool[i]);
             }
-            while(heap_max.size()>0&&fish_time>0){//不断取出当前最优解
-                Pool *tmp=new Pool(heap_max.top());
+            while(heap_max.size()>0&&fish_time>0){
+                Pool tmp=heap_max.top();
                 heap_max.pop();
-                time_spent[tmp->id]++;
-                fish_time--;
-                fish_caught+=tmp->fi;
+                ++time_spent[tmp.id];
+                --fish_time;
+                fish_caught+=tmp.fi;
 
-                tmp->fi-=tmp->di;
-                Pool copy;
-                copy.di=tmp->di;
-                copy.fi=tmp->fi;
-                copy.id=tmp->id;
-                if(tmp->fi>0)heap_max.push(copy);
+                tmp.fi-=tmp.di;
+                if(tmp.fi>0)heap_max.push(tmp);
             }
-            //printf("end:%d fish_time:%d\n",end,fish_time);
             if(fish_time>0)time_spent[1]+=fish_time;//多余的时间全部要给pool1
 
-            if(fish_caught>max_caught){//不太优美
-            //printf("end:%d time_spent[1]:%d\n",end,time_spent[1]);
+            if(fish_caught>max_caught){
                 max_caught=fish_caught;
                 for(int i=1;i<=end;i++)max_plan[i]=time_spent[i]*5;//注意还原成分钟
                 for(int i=end+1;i<=n;i++)max_plan[i]=0;
