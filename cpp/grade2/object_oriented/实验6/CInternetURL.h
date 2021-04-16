@@ -3,8 +3,8 @@ class CInternetURL{
 private:
     CMyString data;
 public:
-    explicit CInternetURL(const CMyString& input):data(input){}
-    explicit CInternetURL(const char* input):data(input){}
+    CInternetURL(const CMyString& input):data(input){}
+    CInternetURL(const char* input):data(input){}
     CMyString GetDomain()const;
     CMyString GetDomainCountry()const;
     CMyString GetDomainType()const;

@@ -4,7 +4,7 @@ using namespace std;
 class CMyString{
 private:
     char *data;//规定所有字符串以\0结尾
-    int length;
+    int length;//保存字符串的长度
 
     static int getLen(const char* p){//获取字符串长度
         int result=0;
@@ -12,7 +12,7 @@ private:
         return result;
     }
 
-    //比较s和p的前plen个字符
+    //比较s和p的前plen个字符，内部方法
     static bool matched(const char* s,const char* p,int plen){
         bool res= true;
         for(int i=0;i<plen&&res;i++){
@@ -21,8 +21,15 @@ private:
         return res;
     }
 public:
-    explicit CMyString(const char *input="");
-    explicit CMyString (char);
+//实现了字符串/字符的构造方法
+//实现了深拷贝构造
+// = 实现了字符串，字符，cmystring的赋值算符重载
+// Find 实现了对字符/字符子串/string子串的查找
+// - 实现了减法算符：逐个扫描字符（串），若匹配则删去，返回缩减之后的子串
+// + 实现了加法算符，返回一个新的cmystring类
+// mid 实现了字符串切片的方法，返回切片后的子串[start:end]
+    CMyString(const char *input="");
+    CMyString (char);
     CMyString(const CMyString &);
     CMyString& operator =(const CMyString&);
     CMyString& operator =(const char*);
@@ -43,7 +50,17 @@ public:
     CMyString operator -(const char *)const;
     CMyString operator -(char)const;
     int size()const{return length;}
+    bool isNum()const;//长度为0返回false，可以识别开头的符号位和中间的小数点位
+    friend bool operator==(const CMyString&,const CMyString&);
 };
+
+bool operator ==(const CMyString &a,const CMyString &b){
+    if(a.length!=b.length)return false;
+    for(int i=0;i<a.length;i++){
+        if(a.data[i]!=b.data[i])return false;
+    }
+    return true;
+}
 
 ostream& operator <<(ostream& os,const CMyString& a){
     os<<a.data;
@@ -94,6 +111,8 @@ CMyString& CMyString::operator=(const char *input) {
 }
 
 double CMyString::ToDouble() const {
+    if(!isNum())return 0;
+    if(length==0)return 0;
     double result=0;
     if(length==0)return 0;
     int commaPosition=0;//找到小数点位置
@@ -260,4 +279,16 @@ CMyString CMyString::operator-(const char *input) const {
 CMyString CMyString::operator-(char c) const {
     char tmp[2]={c,'\0'};
     return *this - tmp;
+}
+
+bool CMyString::isNum() const {
+    if(length==0)return false;//长度为0返回false
+    bool mark=true;
+    int start_point=0;
+    if(data[0]=='+'||data[0]=='-')start_point=1;
+    for(int i=start_point;i<length&&mark;i++){
+        if((data[i]>='0' && data[i]<='9')||data[i]=='.')continue;
+        else mark=false;
+    }
+    return mark;
 }
