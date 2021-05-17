@@ -1,5 +1,5 @@
-// Í¬Ñ§ÃÇ¿ÉÒÔÓÃÏÂÃæµÄmainº¯Êı²âÊÔÒ»ÏÂËùĞ´µÄCMyFileÀà£¬Ïà¹Ø³ÉÔ±º¯Êı¿ÉÒÔ¸ÄÎªÄã¶¨ÒåµÄ½Ó¿Ú¡£
-// ×îºó¼ì²âÊä³öµÄÎÄ¼şÄÚÈİÊÇ·ñÕıÈ·¡£
+// åŒå­¦ä»¬å¯ä»¥ç”¨ä¸‹é¢çš„mainå‡½æ•°æµ‹è¯•ä¸€ä¸‹æ‰€å†™çš„CMyFileç±»ï¼Œç›¸å…³æˆå‘˜å‡½æ•°å¯ä»¥æ”¹ä¸ºä½ å®šä¹‰çš„æ¥å£ã€‚
+// æœ€åæ£€æµ‹è¾“å‡ºçš„æ–‡ä»¶å†…å®¹æ˜¯å¦æ­£ç¡®ã€‚
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -7,57 +7,57 @@ using namespace std;
 class CMyFile
 {
 private:
-    FILE *p;//ÎÄ¼şÖ¸Õë
-    char path[100];//ÎÄ¼şÂ·¾¶Ãû
+    FILE *p;//æ–‡ä»¶æŒ‡é’ˆ
+    char path[100];//æ–‡ä»¶è·¯å¾„å
 public:
-    CMyFile();//¿Õ¹¹Ôìº¯Êı
-    ~CMyFile();//Îö¹¹º¯Êı
-    CMyFile(char[]);//¹¹Ôìº¯Êı
-    bool OpenFile();// ´ò¿ªÎÄ¼ş£¬Ä¬ÈÏ·½Ê½£º´ò¿ª¿É¡°¶ÁĞ´¡±µÄÎÄ¼ş£»
+    CMyFile();//ç©ºæ„é€ å‡½æ•°
+    ~CMyFile();//ææ„å‡½æ•°
+    CMyFile(char[]);//æ„é€ å‡½æ•°
+    bool OpenFile();// æ‰“å¼€æ–‡ä»¶ï¼Œé»˜è®¤æ–¹å¼ï¼šæ‰“å¼€å¯â€œè¯»å†™â€çš„æ–‡ä»¶ï¼›
 	bool OpenFile(const char[]);
-    bool CloseFile();//¹Ø±ÕÎÄ¼ş
-    char GetChar(); //´ÓÎÄ¼şÖĞ¶ÁÈ¡Ò»¸ö×Ö·û£»
-    bool AppendChar(char);//ÏòÎÄ¼şÄ©Î²Ğ´ÈëÒ»¸ö×Ö·û£»
-    char* GetString(int);//´ÓÎÄ¼şÖĞ¶ÁÈëÖ¸¶¨³¤¶ÈµÄ×Ö·û´®£»
-    bool AppendString(char*);//ÏòÎÄ¼şÄ©Î²Ğ´Èë×Ö·û´®£»
-    int GetFileSize();//»ñÈ¡ÎÄ¼ş´óĞ¡¡£
+    bool CloseFile();//å…³é—­æ–‡ä»¶
+    char GetChar(); //ä»æ–‡ä»¶ä¸­è¯»å–ä¸€ä¸ªå­—ç¬¦ï¼›
+    bool AppendChar(char);//å‘æ–‡ä»¶æœ«å°¾å†™å…¥ä¸€ä¸ªå­—ç¬¦ï¼›
+    char* GetString(int);//ä»æ–‡ä»¶ä¸­è¯»å…¥æŒ‡å®šé•¿åº¦çš„å­—ç¬¦ä¸²ï¼›
+    bool AppendString(char*);//å‘æ–‡ä»¶æœ«å°¾å†™å…¥å­—ç¬¦ä¸²ï¼›
+    int GetFileSize();//è·å–æ–‡ä»¶å¤§å°ã€‚
 };
 CMyFile::CMyFile(){printf("please enter path of the file\n");}
 CMyFile::~CMyFile(){if(!p)fclose(p);delete p;}
 CMyFile::CMyFile(char srcPath[]){p= nullptr;strcpy(path,srcPath);OpenFile();}
 bool CMyFile::OpenFile()
 {
-    p=fopen(path,"a+");//ÓÃ¿É¶ÁĞ´µÄ·½Ê½´ò¿ªÎÄ¼ş
+    p=fopen(path,"a+");//ç”¨å¯è¯»å†™çš„æ–¹å¼æ‰“å¼€æ–‡ä»¶
     if(p== nullptr)return false;
     return true;
 }
 bool CMyFile::OpenFile(const char srcPath[])
 {
-    p=fopen(srcPath,"a+");//ÓÃ¿É¶ÁĞ´µÄ·½Ê½´ò¿ªÎÄ¼ş
+    p=fopen(srcPath,"a+");//ç”¨å¯è¯»å†™çš„æ–¹å¼æ‰“å¼€æ–‡ä»¶
     if(p== nullptr)return false;
     return true;
 }
-bool CMyFile::CloseFile()//·â×°fcloseº¯Êı²¢¸ø³öÌáÊ¾
+bool CMyFile::CloseFile()//å°è£…fcloseå‡½æ•°å¹¶ç»™å‡ºæç¤º
 {
-    if(fclose(p))
+    if(!fclose(p))
     {
         printf("close error!\n");
         return false;
     }
     return true;
 }
-char CMyFile::GetChar()//·â×°fgetcº¯Êı
+char CMyFile::GetChar()//å°è£…fgetcå‡½æ•°
 {
     return fgetc(p);
 }
-bool CMyFile::AppendChar(char _input)//Ñ°Ö·µ½ÎÄ¼şÄ©Î²ÔÙÌí¼Ó×Ö·û
+bool CMyFile::AppendChar(char _input)//å¯»å€åˆ°æ–‡ä»¶æœ«å°¾å†æ·»åŠ å­—ç¬¦
 {
     fseek(p,0L,SEEK_END);
     fprintf(p,"%c",_input);
     rewind(p);
     return true;
 }
-char * CMyFile::GetString(int length=10)//ÔÚµ±Ç°ÎÄ¼şÖ¸ÕëÖ®ºó¶ÁÈ¡Ö¸¶¨³¤¶ÈµÄ×Ö·û´®£¬È±Ê¡³¤¶ÈÎª10
+char * CMyFile::GetString(int length=10)//åœ¨å½“å‰æ–‡ä»¶æŒ‡é’ˆä¹‹åè¯»å–æŒ‡å®šé•¿åº¦çš„å­—ç¬¦ä¸²ï¼Œç¼ºçœé•¿åº¦ä¸º10
 {
     if(length>100)
     {
@@ -74,14 +74,14 @@ char * CMyFile::GetString(int length=10)//ÔÚµ±Ç°ÎÄ¼şÖ¸ÕëÖ®ºó¶ÁÈ¡Ö¸¶¨³¤¶ÈµÄ×Ö·û´®
 	rewind(p);
     return output;
 }
-bool CMyFile::AppendString(char *input=nullptr)//ÔÚÄ©Î²Ìí¼Ó×Ö·û´®
+bool CMyFile::AppendString(char *input=nullptr)//åœ¨æœ«å°¾æ·»åŠ å­—ç¬¦ä¸²
 {
     fseek(p,0L,SEEK_END);
     fprintf(p,"%s",input);
     rewind(p);
     return true;
 }
-int CMyFile::GetFileSize()//ÀûÓÃftellÀ´Í³¼Æ×Ö½ÚÊı
+int CMyFile::GetFileSize()//åˆ©ç”¨ftellæ¥ç»Ÿè®¡å­—èŠ‚æ•°
 {
     if(!p) return -1;
     rewind(p);
@@ -92,20 +92,20 @@ int CMyFile::GetFileSize()//ÀûÓÃftellÀ´Í³¼Æ×Ö½ÚÊı
 int main()
 {
 	CMyFile myFile;
-	bool right = myFile.OpenFile("TestFile.txt");   // ×¢ÒâÎÄ¼şÂ·¾¶
+	bool right = myFile.OpenFile("TestFile.txt");   // æ³¨æ„æ–‡ä»¶è·¯å¾„
 	if (right == NULL) return 0;
 
 	char str[20];
-	myFile.AppendString("hello");  // ÏòÎÄ¼ş½áÎ²´¦ÖĞĞ´ÈëÒ»¸ö×Ö·û´®£¬Õâ¸ö³ÉÔ±º¯Êı½Ó¿Ú¿ÉÒÔĞŞ¸ÄÎªÄãËùĞ´ÀàµÄº¯Êı½Ó¿Ú
-	cout<<myFile.GetString(3)<<endl;   // ´ÓÎÄ¼şÖĞ¶Á³öÒ»¸ö³¤¶ÈÎª3µÄ×Ö·û´®£¬Õâ¸ö³ÉÔ±º¯Êı½Ó¿Ú¿ÉÒÔĞŞ¸ÄÎªÄãËùĞ´ÀàµÄº¯Êı½Ó¿Ú
+	myFile.AppendString("hello");  // å‘æ–‡ä»¶ç»“å°¾å¤„ä¸­å†™å…¥ä¸€ä¸ªå­—ç¬¦ä¸²ï¼Œè¿™ä¸ªæˆå‘˜å‡½æ•°æ¥å£å¯ä»¥ä¿®æ”¹ä¸ºä½ æ‰€å†™ç±»çš„å‡½æ•°æ¥å£
+	cout<<myFile.GetString(3)<<endl;   // ä»æ–‡ä»¶ä¸­è¯»å‡ºä¸€ä¸ªé•¿åº¦ä¸º3çš„å­—ç¬¦ä¸²ï¼Œè¿™ä¸ªæˆå‘˜å‡½æ•°æ¥å£å¯ä»¥ä¿®æ”¹ä¸ºä½ æ‰€å†™ç±»çš„å‡½æ•°æ¥å£
 
 
-	// ÒÔÒ»´ÎÊä³öÒ»¸ö×Ö·ûµÄ·½Ê½£¬Êä³öÕû¸öÎÄ±¾ÎÄ¼ş¡£
-	// ×¢Òâ£º¼ì²éÊä³ö½á¹ûÊÇ·ñÕıÈ·¡£
+	// ä»¥ä¸€æ¬¡è¾“å‡ºä¸€ä¸ªå­—ç¬¦çš„æ–¹å¼ï¼Œè¾“å‡ºæ•´ä¸ªæ–‡æœ¬æ–‡ä»¶ã€‚
+	// æ³¨æ„ï¼šæ£€æŸ¥è¾“å‡ºç»“æœæ˜¯å¦æ­£ç¡®ã€‚
 	int ch = myFile.GetChar();
 	while (ch != -1)
 	{
-		if (ch == 10)  // 10£º»»ĞĞ·ûµÄASCII
+		if (ch == 10)  // 10ï¼šæ¢è¡Œç¬¦çš„ASCII
 			cout << (char)ch;
 		else
 			cout << (char)ch;
@@ -115,5 +115,5 @@ int main()
 
 	cout << endl << endl << "The size of file is " << myFile.GetFileSize() << " characters." << endl;
 
-	// myFile.Close();  // Êµ¼ÊÉÏÕâÌõÓï¾ä¿ÉÒÔ²»Ğ´£¬Èç¹ûÒª¹Ø±ÕÎÄ¼ş£¬³ÌĞò»á×Ô¶¯¹Ø±Õ¡£
+	// myFile.Close();  // å®é™…ä¸Šè¿™æ¡è¯­å¥å¯ä»¥ä¸å†™ï¼Œå¦‚æœè¦å…³é—­æ–‡ä»¶ï¼Œç¨‹åºä¼šè‡ªåŠ¨å…³é—­ã€‚
 }

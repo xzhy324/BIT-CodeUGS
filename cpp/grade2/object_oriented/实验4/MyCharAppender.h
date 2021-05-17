@@ -1,6 +1,10 @@
 
 #include "cmath"
 class CharAppender{
+    private:
+    char* s;
+    int max_size;
+    int length;
 public:
     CharAppender(int user_size=10){
         s=new char[user_size];
@@ -40,8 +44,4 @@ public:
         }
         return result;
     }
-private:
-    char* s;
-    int max_size;
-    int length;
 };
