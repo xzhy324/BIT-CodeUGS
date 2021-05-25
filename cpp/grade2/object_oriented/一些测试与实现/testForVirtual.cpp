@@ -5,7 +5,7 @@ private:
     int id;
 public:
     item(int input=0):id(input){cout<<"item constructed!\n";};
-    ~item(){cout<<"item destructed!\n";};
+    virtual ~item(){cout<<"item destructed!\n";};
 };
 class bookitem: public item{
 private:
