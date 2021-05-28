@@ -1,37 +1,57 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
+#include <ctime>
 
 using namespace std;
 
-const int MAX_SIZE=100;
-const int InstanceNum = 10;
+const int MAX_SIZE=100;//工件和机器数量的最大值
+const int InstanceNum = 10;//用例个数
+FILE* fp;
 
-const double Epsilon = 1e-5;//T的最终冷却温度
-const double temperature_factor = 1 - 1e-4;//降温速度
-const double start_temperature = 1e8;//起始温度
-const double deltaFactor = 1;
+const double end_temperature = 1e-3;//T的最终冷却温度
+const double temperature_factor = 0.9999;//以等比方式降温的比例系数
+const double start_temperature = 1e5;//T的起始温度
+const double deltaFactor = 1;//value函数中用于减少接受坏解的概率，这个因子越大，则回退坏解的概率会越低
+const int max_markov_length = 200000;//控制markov链的长度
+const bool youhua_rollback = true;
+
 
 int n,m;//n个工件，m个车间
-int s[MAX_SIZE][MAX_SIZE];//第i个零件在第j车间加工的开始时间
 int c[MAX_SIZE][MAX_SIZE];//第i个零件在第j个车间的加工时间
 int p[MAX_SIZE];//排列的形式刻画解
+
 int CalculateTime();
 double schedule(int outerLoop,double T);
 void initP(int* P);
 void reassignP(int* P);
 double value(int time);
+void getData();
+void intcpy(int* dst,const int* src);
 template <class T>
-void swap(const T& a,const T& b){
-    T tmp=a;a=b;b=tmp;
-}
+void swap(const T& a,const T& b){T tmp=a;a=b;b=tmp;}
+
+
+/*————————————————————————————————————————————————————————————————*/
 int main(){
-    for(int insNum=1;insNum<=InstanceNum;insNum++){
+    /*
+     * 将结果保存到statistics.txt
+    int totalResult=0;
+    FILE *output = fopen("statistics.txt","a+");
+    fseek(output,0,SEEK_END);fputc('\n',output);
+    fprintf(output,"racial:%lf start:%lf end:%lf rollback?:%d \n"
+            ,temperature_factor,start_temperature,end_temperature,youhua_rollback);
+    */
+
+    fp= fopen("flowshop.txt","r");
+    if(!fp){
+        cout<<"Error when opening file!";
+        exit(0);
+    }
+
+    for(int insNum=0;insNum<InstanceNum;insNum++){
         //读入本例的所需数据
-        cin>>n>>m;
-        for(int i=0;i<n;i++)
-            for(int j=0;j<m;j++)
-                cin>>c[i][j];
+        getData();
 
         //随机生成一个初始解p[]，初始化温度,并计算初始解的完成时间
         initP(p);
@@ -42,14 +62,21 @@ int main(){
         for(int t=1; ;t++){
             //温度随迭代轮次下降
             T = schedule(t,T);
-            if(T<Epsilon){
-                cout<<"The result is "<<currentTime<<" ,the total cal is "<<t<<endl;
+            if(T<end_temperature || t>max_markov_length){
+                printf("Instance:%d Result:%d Rounds:%d\n",insNum,currentTime,t);
+                /*
+                 * 将结果打印到statistics.txt
+                fprintf(output,"Instance:%d Result:%d Rounds:%d\n",insNum,currentTime,t);
+                totalResult+=currentTime;
+                 */
                 break;
             }
 
             //重新生成一个排列p
+            int p_tmp[MAX_SIZE];
+            intcpy(p_tmp,p);
             reassignP(p);
-
+            //对于新的排列p，计算下一时间
             int nextTime = CalculateTime();
 
             double deltaT = value(nextTime) - value(currentTime);
@@ -59,17 +86,30 @@ int main(){
                 double possibility = exp(-deltaT / T);
                 if( rand()%int(1.0e5) /1.0e5 <= possibility ){
                     currentTime = nextTime;
-                }else{
-                    
+                }else{//未接受最坏解，则本次应该回退
+                    if(youhua_rollback)
+                        intcpy(p,p_tmp);
                 }
             }
         }
 
     }
+    /*
+     * 将结果打印到statistics.txt
+    fprintf(output,"The total result is:%d\n",totalResult);
+    fprintf(output,"The total time is:%lf\n",(double)clock() /CLOCKS_PER_SEC);
+    fclose(output);
+     */
+    printf("The total time is: %.4lf s\n",(double)clock() /CLOCKS_PER_SEC);
+    fclose(fp);
+    return 0;
 }
+/*————————————————————————————————————————————————————————————————*/
 
-int CalculateTime(){
-    //cout<<"calculating!\n";
+
+int CalculateTime(){//通过引入辅助矩阵s来记录开始时间，并按照尽可能紧凑的方式来
+    int s[MAX_SIZE][MAX_SIZE];//第i个零件在第j车间加工的开始时间，用于辅助刻画最后的完成时间
+
     s[p[0]][0] = 0;
     for(int i=1;i<m;i++)
         s[p[0]][i] = s[p[0]][i-1] + c[p[0]][i-1];
@@ -103,4 +143,20 @@ void reassignP(int *P){
 
 double value(int time){
     return time * deltaFactor;
+}
+
+void getData(){
+    char line[4*MAX_SIZE];
+    fgets(line,4*MAX_SIZE,fp);fgets(line,4*MAX_SIZE,fp);//开头的乱七八糟的加号和用例编号不需要
+    fscanf(fp,"%d %d", &n, &m);
+    for(int i=0;i<n;i++)
+        for(int j=0;j<2*m;j++)//编号项舍弃，只读入数据项
+            fscanf(fp,"%d",&c[i][j/2]);
+
+    fgets(line,4*MAX_SIZE,fp);
+}
+
+void intcpy(int *dst,const int *src){
+    for(int i=0;i<n;i++)
+        dst[i]=src[i];
 }
