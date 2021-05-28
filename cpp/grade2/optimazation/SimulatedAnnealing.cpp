@@ -11,9 +11,9 @@ FILE* fp;
 
 const double end_temperature = 1e-3;//T的最终冷却温度
 const double temperature_factor = 0.9999;//以等比方式降温的比例系数
-const double start_temperature = 1e5;//T的起始温度
+const double start_temperature = 1e8;//T的起始温度
 const double deltaFactor = 1;//value函数中用于减少接受坏解的概率，这个因子越大，则回退坏解的概率会越低
-const int max_markov_length = 200000;//控制markov链的长度
+const int max_markov_length = 2000000;//控制markov链的长度
 const bool youhua_rollback = true;
 
 
@@ -32,18 +32,19 @@ template <class T>
 void swap(const T& a,const T& b){T tmp=a;a=b;b=tmp;}
 
 
-/*————————————————————————————————————————————————————————————————*/
+/*————————————————————————MAIN————————————————————————————————————————*/
 int main(){
-    /*
-     * 将结果保存到statistics.txt
+
+    //将结果保存到statistics.txt************************************************************
     int totalResult=0;
     FILE *output = fopen("statistics.txt","a+");
-    fseek(output,0,SEEK_END);fputc('\n',output);
-    fprintf(output,"racial:%lf start:%lf end:%lf rollback?:%d \n"
+    fseek(output,0,SEEK_END);fputc('\n',output);//定位到文件末尾的新起一行
+    fprintf(output,"/***********************************************/\n");
+    fprintf(output,"racial:%lf\nstart :%lf\nend   :%lf\nrollback?:%d\n\n"
             ,temperature_factor,start_temperature,end_temperature,youhua_rollback);
-    */
+    //将结果保存到statistics.txt************************************************************
 
-    fp= fopen("flowshop.txt","r");
+    fp= fopen("flowshop-test-10-student.txt","r");
     if(!fp){
         cout<<"Error when opening file!";
         exit(0);
@@ -62,13 +63,13 @@ int main(){
         for(int t=1; ;t++){
             //温度随迭代轮次下降
             T = schedule(t,T);
-            if(T<end_temperature || t>max_markov_length){
+            if(T<=end_temperature || t>=max_markov_length){
                 printf("Instance:%d Result:%d Rounds:%d\n",insNum,currentTime,t);
-                /*
-                 * 将结果打印到statistics.txt
+
+                 //将结果打印到statistics.txt
                 fprintf(output,"Instance:%d Result:%d Rounds:%d\n",insNum,currentTime,t);
                 totalResult+=currentTime;
-                 */
+
                 break;
             }
 
@@ -94,17 +95,19 @@ int main(){
         }
 
     }
-    /*
-     * 将结果打印到statistics.txt
-    fprintf(output,"The total result is:%d\n",totalResult);
-    fprintf(output,"The total time is:%lf\n",(double)clock() /CLOCKS_PER_SEC);
+
+    //将结果打印到statistics.txt**********************************************
+    fprintf(output,"\nThe total result is:%d\n",totalResult);
+    fprintf(output,"The total time is:%g\n",(double)clock() /CLOCKS_PER_SEC);
+    fprintf(output,"/***********************************************/\n");
     fclose(output);
-     */
-    printf("The total time is: %.4lf s\n",(double)clock() /CLOCKS_PER_SEC);
+    //将结果打印到statistics.txt**********************************************
+
+    printf("The total time is: %.4g s\n",(double)clock() /CLOCKS_PER_SEC);
     fclose(fp);
     return 0;
 }
-/*————————————————————————————————————————————————————————————————*/
+/*————————————————————————MAIN————————————————————————————————————————*/
 
 
 int CalculateTime(){//通过引入辅助矩阵s来记录开始时间，并按照尽可能紧凑的方式来
