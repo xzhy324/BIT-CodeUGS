@@ -23,7 +23,7 @@ int Edmonds_Karp(int start,int end)//求最大流
     memset(pre,0,sizeof(pre));
     queue<int> q;
     while(true)//每次循环都重新走一遍剩余网络
-    {
+    {   //直接显式的表示剩余网络也许是一种方法
         memset(add,0,sizeof(add));
         add[start]=INF;//初始的流量是一个无穷大的值
         q.push(start);
