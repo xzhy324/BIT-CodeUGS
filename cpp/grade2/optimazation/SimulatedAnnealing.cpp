@@ -6,7 +6,7 @@
 using namespace std;
 
 const int MAX_SIZE=100;//工件和机器数量的最大值
-const int InstanceNum = 10;//用例个数
+const int InstanceNum = 11;//用例个数
 FILE* fp;
 
 const double end_temperature = 1e-3;//T的最终冷却温度
@@ -51,6 +51,9 @@ int main(){
     }
 
     for(int insNum=0;insNum<InstanceNum;insNum++){
+
+        int gbest = 0x3f3f3f3f;
+
         //读入本例的所需数据
         getData();
 
@@ -61,12 +64,15 @@ int main(){
 
         //开始迭代
         for(int t=1; ;t++){
+
+            gbest = min(gbest,currentTime);//记忆化搜索
+
             //温度随迭代轮次下降
             T = schedule(t,T);
             if(T<=end_temperature || t>=max_markov_length){
-                printf("Instance:%d Result:%d Rounds:%d\n",insNum,currentTime,t);
+                printf("Instance:%2d Result:%d Rounds:%d gbest:%d\n",insNum,currentTime,t,gbest);
 
-                 //将结果打印到statistics.txt
+                //将结果打印到statistics.txt
                 fprintf(output,"Instance:%d Result:%d Rounds:%d\n",insNum,currentTime,t);
                 totalResult+=currentTime;
 
