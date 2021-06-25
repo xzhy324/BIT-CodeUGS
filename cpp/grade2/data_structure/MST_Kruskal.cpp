@@ -36,8 +36,8 @@ int main(){
     }
     /*********/
     int mark=1;
-    for(int i=2;i<=n&&mark;i++)if(vex[i].set!=vex[i-1].set)mark=0;//judge if unconected
-    if(mark==1)printf("%d\n",cost);
-    else printf("-1\n");
+    for(int i=2;i<=n&&mark;i++)if(vex[i].set!=vex[i-1].set)mark=0;//judge if unconnected
+    //if(mark==1)printf("%d\n",cost);
+    //else printf("-1\n");
     return 0;
 }
