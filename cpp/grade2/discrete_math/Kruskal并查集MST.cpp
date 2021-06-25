@@ -57,10 +57,6 @@ int main(){
             sum+=lines[cur].w;
         }
     }
-    for(int i=1;i<=m;i++){
-        if(lines[i].chosen)
-            cout<<lines[i].a<<" "<<lines[i].b<<endl;
-    }
     bool connected = true;//通过扫一遍染色来判断是否是连通图
     for(int i=1;i<=n;i++){
         if(us.Find(i)!=us.Find(1)){
@@ -69,6 +65,10 @@ int main(){
         }
     }
     if(connected){
+        for(int i=1;i<=m;i++){
+            if(lines[i].chosen)
+                cout<<lines[i].a<<" "<<lines[i].b<<endl;
+        }
         if(sum==0)cout<<"0 \n";
         else cout<<sum<<endl;
     }else cout<<"-1"<<endl;
