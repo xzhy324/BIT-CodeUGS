@@ -1,0 +1,72 @@
+1. 学校里的学生、教师基本信息包括姓名，性别，出生年月，ID（学生以入学年份开头，教师以t开头）。
+
+   要求：1) 成员函数 GetTeacherFromCourse(课程名称)——学生能知道某一门课是哪位老师讲课
+
+         2) 成员函数 GetScoreFromCourse(课程名称)——学生根据课程名称查询成绩；
+
+         3) 成员函数 GeInfoFromID(学生ID)——t教师通过学生ID能知道学生的基本信息（姓名、性别和年龄）；
+
+         4) 成员函数 SetScoreToCourse(课程名，课程成绩，)——教师课程名给出对应的课程成绩；
+
+         5) 根据给出的示例性数据，根据需要自行定义类、成员函数。
+         
+         6）程序要能体现类间关系之一：组合关系、继承关系。
+
+
+示例性的数据：
+
+
+学生和老师文件 tas.txt 的记录结构如下：姓名 性别 出生年月 ID
+
+李逵 男 1963.8 20180801       
+花千羽 女 1999.10 20181011
+孙悟空 男 1950.8 t20011211
+TF-BOY 男 2003.9 20180901
+冷冰冰 女 2010.12 20181217
+张三丰 男 1979.10 t20160708
+
+
+
+课程文件 course.txt 的记录结构如下：课程编号    课程名称   ID
+COM002 知识图谱 t20010708
+COM005 操作系统 t20011211
+COM011 数据库原理 t20160708
+COM016 大数据 t20161211
+
+
+
+分数文件 score.txt 的记录结构如下：ID    课程编号      成绩
+20120801 COM016 86
+20131011 COM002 77
+20140901 COM016 90
+20151217 COM002 59
+
+
+
+
+
+2. 在数据库的查询操作中，对SQL语句的查询构造过程中，一般采用如下类似的方式：
+void main( )
+{
+	CMyString userName, password;
+	cin >> userName >> password;
+	CMyString sql = "select * from DB where userName="+userName+"and password ="+password;
+}
+这种方法容易出现的问题是，如果useName="user"，password = "abc || 1 = = 1"，那么where字句中的密码查询结果永远都是true，造成用户信息泄露。
+为了防止出现类似SQL语句的注入错误，在ODBC或JDBC等的数据库连接与查询过程中，SQL语句一般采用以下方法来构造：
+void main( )
+{
+   CSqlStatement sql ="select ?, ? from student where gender = ? and height >= ? order by ?";
+   sql.SetAttribute(1, "SID");     // 需要分析：这个参数必须是：只能由数字构成的字符串
+   sql.SetAttribute(2, "Name");
+   sql.SetAttribute(3, "female");  // 需要分析：这个参数必须是 male / female
+   sql.SetAttribute(4, "165");     // 需要分析：这个参数必须是数
+   sql.SetAttribute(5, "gender");
+   sql.ExecuteSql( );
+}
+在main函数中，出现“？”的地方，都默认有一个整数值作为编号依次对应。成员函数SetAttribute通过编号一一对应赋值，并最终构造完整的SQL语句。
+请按照上述main函数中对象sql调用各成员函数的方式来定义CSqlStatement类。成员函数ExecuteSql本意是执行sql语句。但作为实验，改为输出所构造的整个SQL语句即可。
+
+注意：1. 使用你自己定义的CMyString类，并根据需要自行增加相关的成员函数。
+      2. 不能使用char，char*，以及C++的string、标准类模板等。
+      3. 请将CMyString类直接放在程序文件中，不要单独交CMyString类的文件。
