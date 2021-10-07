@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     #  Cut the window in 2 parts 将窗口分为两部分
     #  sharex共享x轴，图像分为上下两部分，上面部分ax_box占比0.15，下面部分ax_hist占比0.85
-    f, (ax_box, ax_hist) = plt.subplots(2, sharex=True, gridspec_kw={"height_ratios": (.15, .85)})
+    f, (ax_box, ax_hist) = plt.subplots(2, sharex='all', gridspec_kw={"height_ratios": (.15, .85)})
     plt.xlim(0, 1)
     #  Add a graph in each part 绘制两种不同的图像
     sns.boxplot(draw_data, ax=ax_box)
