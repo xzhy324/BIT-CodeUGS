@@ -1,0 +1,5 @@
+project(playGround)
+add_executable(Ksimplemath Ksimplemath.cpp)
+add_executable(test test.cpp)
+add_executable(Epowertower Epowertower.cpp)
+add_executable(H H.cpp)
