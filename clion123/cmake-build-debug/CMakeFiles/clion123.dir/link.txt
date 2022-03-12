@@ -1,3 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\clion123.dir/objects.a
-C:\Environment\mingw64\bin\ar.exe cr CMakeFiles\clion123.dir/objects.a @CMakeFiles\clion123.dir\objects1.rsp
-C:\Environment\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\clion123.dir/objects.a -Wl,--no-whole-archive -o clion123.exe -Wl,--out-implib,libclion123.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\clion123.dir\linklibs.rsp

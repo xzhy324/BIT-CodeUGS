@@ -11,6 +11,9 @@ import numpy as np
 if __name__ == "__main__":
     for sheet_num in range(0,3):
         raw_corpus = []  # 原始文章集合
+        """
+        raw_corpus = [doc1,doc2,...] doc = 将整个文章以字符串的形式输入
+        """
         # 读取文章
         df = pd.DataFrame(pd.read_excel("./Corpus/data1.xlsx", engine='openpyxl', sheet_name=sheet_num))
         raw_corpus=df.values
@@ -25,10 +28,15 @@ if __name__ == "__main__":
                 stop_words.append(line.strip())
 
         corpus = []  # 语料
+        """
+        corpus = [sentence1,sentence2,...] , sentence = [word1,word2,...]
+        """
         for article in raw_corpus:
             article = ''.join(re.findall(r'[\u4e00-\u9fa5]+', article[0]))  # 仅保留中文，如需要数字和英文请注释本行
             corpus.append([item for item in jieba.cut(article) if item not in stop_words])  # 去掉停止词
             # corpus.append([item for item in jieba.cut(article)])
+
+        print(corpus)
 
         dictionary = corpora.Dictionary(corpus)
         '''
@@ -87,3 +95,4 @@ if __name__ == "__main__":
         for topic in model.print_topics(num_topics=5, num_words=3):
             print(topic[1])
         print()
+
