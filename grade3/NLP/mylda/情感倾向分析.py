@@ -11,7 +11,8 @@ N_CORPUS = 28
 if __name__ == "__main__":
     # 加载senta模型
     senta = hub.Module(name="senta_bilstm")
-
+    """以下是唯一需要修改的地方"""
+    # -------------------------------------------------------------------------------
     test_text = []
     # 把要测试的短文本以str格式放到这个列表里
     for i in range(1, N_CORPUS+1):
@@ -22,7 +23,7 @@ if __name__ == "__main__":
                 strBlock += line
             strBlock = ''.join(re.findall(r'[\u4e00-\u9fa5]+', strBlock))  # 仅保留汉字部分
             test_text.append(strBlock)
-
+    # ------------------------------------------------------------------------------
     # 指定模型输入
     input_dict = {"text": test_text}
 
